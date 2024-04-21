@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background-color: #f9dbea; /* Soft pink background */
+            margin-top: 50px;
+        }
+        h2 {
+            color: #6d214f; /* Purple heading */
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        form {
+            display: inline-block;
+            background-color: #ffffff; /* White form background */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            color: #6d214f; /* Purple label text */
+            font-size: 16px;
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #6d214f; /* Purple border */
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #b72c89; /* Darker purple on focus */
+            outline: none;
+        }
+        button {
+            background-color: #b72c89; /* Dark purple button */
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #6d214f; /* Lighter purple on hover */
+        }
+        a {
+            color: #b72c89; /* Purple link text */
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #6d214f; /* Darker purple on hover */
+        }
+    </style>
+</head>
+<body>
+    <h2>Student Registration</h2>
+    <form action="/register" method="POST">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required><br>
+        <label for="roll_number">Roll Number:</label><br>
+        <input type="text" id="roll_number" name="roll_number" placeholder="Enter your roll number" required><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required><br>
+        <button type="submit">Register</button>
+        <!-- Links to Login pages -->
+        <p>
+            <a href="/login">Already a student? Login</a><br>
+            <a href="/teacher/login">Are you a teacher? Login</a>
+        </p>
+    </form>
+</body>
+</html>

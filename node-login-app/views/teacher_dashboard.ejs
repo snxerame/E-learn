@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        /* Basic styling for the dashboard */
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            padding: 20px;
+            background-color: #ffedd9; /* Light peach background */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ff6b6b; /* Red heading */
+        }
+        /* Grid layout for course cards */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .course-card {
+            border: 2px solid #ff6b6b; /* Red border */
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            background-color: #fff; /* White background */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .video-container {
+            margin-top: 20px;
+        }
+        iframe {
+            width: 100%;
+            height: 200px;
+            border-radius: 5px;
+        }
+        .link-input {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .link-input input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        .link-input button {
+            padding: 8px 16px;
+            background-color: #ff6b6b; /* Red button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .link-input button:hover {
+            background-color: #ff4d4d; /* Darker red on hover */
+        }
+        .logout-btn {
+            text-align: center;
+            margin-top: 30px;
+        }
+        form {
+            margin-top: 40px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff; /* White background */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            color: #ff6b6b; /* Red label text */
+            font-size: 16px;
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="datetime-local"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="datetime-local"]:focus {
+            border-color: #ff6b6b; /* Red border color on focus */
+            outline: none;
+        }
+        button[type="submit"] {
+            background-color: #ff6b6b; /* Red button */
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #ff4d4d; /* Darker red on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Dashboard</h1>
+    <div class="grid-container">
+        <% courses.forEach(course => { %>
+            <div class="course-card">
+                <h3 style="color: #ff6b6b;"><%= course.course_title %></h3>
+                <p><strong>Teacher:</strong> <%= course.teacher_name %></p>
+                <div class="video-container">
+                    <iframe src="<%= course.youtube_link %>" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="link-input">
+                    <input type="text" id="driveLink_<%= course.course_id %>" value="<%= course.drive_link || '' %>" placeholder="Paste new Google Drive link">
+                    <button onclick="updateDriveLink('<%= course.course_id %>')">Update Drive Link</button>
+                </div>
+                <div class="link-input">
+                    <input type="text" id="quizLink_<%= course.course_id %>" value="<%= course.quiz_link || '' %>" placeholder="Paste new Quiz link">
+                    <button onclick="updateQuizLink('<%= course.course_id %>')">Update Quiz Link</button>
+                </div>
+                <div class="link-input">
+                    <input type="text" id="meetingId_<%= course.course_id %>" value="<%= course.meeting_id || '' %>" placeholder="Enter new Meeting ID">
+                    <button onclick="updateMeetingId('<%= course.course_id %>')">Update Meeting ID</button>
+                </div>
+                <p><strong>Score:</strong> <%= course.score %></p>
+                <p><strong>Meeting ID:</strong> <%= course.meeting_id %></p>
+            </div>
+        <% }); %>
+    </div>
+    
+    <!-- Logout button -->
+    <form action="/logout" method="POST" class="logout-btn">
+        <button type="submit">Logout</button>
+    </form>
+
+    <!-- Form to add new course -->
+    <form action="/add" method="POST">
+        <label for="course_title">Course Title:</label>
+        <input type="text" id="course_title" name="course_title" required><br>
+
+        <label for="teacher_name">Teacher Name:</label>
+        <input type="text" id="teacher_name" name="teacher_name" required><br>
+
+        <label for="youtube_link">YouTube Link:</label>
+        <input type="text" id="youtube_link" name="youtube_link"><br>
+
+        <label for="drive_link">Notes:</label>
+        <input type="text" id="drive_link" name="drive_link"><br>
+
+        <label for="quiz_link">Quiz Link:</label>
+        <input type="text" id="quiz_link" name="quiz_link"><br>
+
+        <label for="score">Score:</label>
+        <input type="number" id="score" name="score"><br>
+
+        <label for="meeting_id">Meeting ID:</label>
+        <input type="text" id="meeting_id" name="meeting_id"><br>
+
+        <label for="meeting_time">Meeting Time:</label>
+        <input type="datetime-local" id="meeting_time" name="meeting_time"><br>
+
+        <button type="submit">Add Course</button>
+    </form>
+
+    <script>
+        function updateDriveLink(courseId) {
+            const newDriveLink = document.getElementById(`driveLink_${courseId}`).value;
+            fetch(`/update-drive-link/${courseId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ driveLink: newDriveLink })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Drive link updated successfully');
+                    window.location.reload(); // Refresh page after update
+                } else {
+                    throw new Error('Failed to update drive link');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating drive link:', error.message);
+                alert('Failed to update drive link. Please try again.');
+            });
+        }
+
+        function updateQuizLink(courseId) {
+            const newQuizLink = document.getElementById(`quizLink_${courseId}`).value;
+            fetch(`/update-quiz-link/${courseId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ quizLink: newQuizLink })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Quiz link updated successfully');
+                    window.location.reload(); // Refresh page after update
+                } else {
+                    throw new Error('Failed to update quiz link');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating quiz link:', error.message);
+                alert('Failed to update quiz link. Please try again.');
+            });
+        }
+
+        function updateMeetingId(courseId) {
+            const newMeetingId = document.getElementById(`meetingId_${courseId}`).value;
+            fetch(`/update-meeting-id/${courseId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ meetingId: newMeetingId })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Meeting ID updated successfully');
+                    window.location.reload(); // Refresh page after update
+                } else {
+                    throw new Error('Failed to update meeting ID');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating meeting ID:', error.message);
+                alert('Failed to update meeting ID. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html>
